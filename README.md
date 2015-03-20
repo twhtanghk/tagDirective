@@ -2,11 +2,11 @@
 tagDirective is angular tag directive derived from ngTagEditor
 
 ## Installation
-`
+```
   npm install && bower install
   node_modules/.bin/gulp
   node_modules/.bin/http-server
-`
+```
 
 ## Demo
 `
