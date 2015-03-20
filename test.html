@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html ng-app="app">
+	<head>
+		<style>
+			body{background-color:#fff;}
+			form{width:600px;margin:15% auto;}
+		</style>
+		<link rel="stylesheet" href="tag.css" type="text/css"/>
+		
+		<script type="text/javascript" src="index.js"></script>
+		<script type="text/javascript">
+			angular.module('app', ['ngTag'])
+				.controller('RandomController', function($scope){
+					$scope.tags = [
+						'See',
+						'how',
+						'amazing',
+						'is',
+						'AngularJS'
+					];
+				});
+		</script>
+	</head>
+	<body>
+		<form ng-controller="RandomController">
+			<tag-editor ng-model="tags"></tag-editor>
+			<span class="log">{{tags}}</span>
+		</form>
+	</body>
+</html>

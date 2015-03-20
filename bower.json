@@ -1,0 +1,31 @@
+{
+  "name": "tagDirective",
+  "version": "0.0.0",
+  "main": [
+    "tag.scss",
+    "tag.html",
+    "tag.js"
+  ],
+  "homepage": "https://github.com/twhtanghk/tagDirective",
+  "moduleType": [
+    "node"
+  ],
+  "keywords": [
+    "angular",
+    "tag",
+    "directive"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "underscore": "~1.8.2",
+    "angular": "~1.3.15"
+  },
+  "devDependencies": {}
+}
