@@ -1,11 +1,7 @@
 {
   "name": "tagDirective",
   "version": "0.0.0",
-  "main": [
-    "tag.scss",
-    "tag.html",
-    "tag.js"
-  ],
+  "main": "tag.js",
   "homepage": "https://github.com/twhtanghk/tagDirective",
   "moduleType": [
     "node"

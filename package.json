@@ -2,11 +2,7 @@
   "name": "tagDirective",
   "version": "0.0.0",
   "description": "tagDirective",
-  "main": [
-    "tag.scss",
-    "tag.html",
-    "tag.js"
-  ],
+  "main": "tag.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
