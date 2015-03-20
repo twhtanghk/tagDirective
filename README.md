@@ -15,7 +15,7 @@ tagDirective is angular tag directive derived from ngTagEditor
 
 ## Usage
 `
-<tag-editor filter='file/api/tag' placeholder='Tag e.g. Team, Confidential, ...'></tag-editor>
+<tag-editor filter='file/api/tag' ng-model='tags' template-url='tag.html' placeholder='Tag e.g. Team, Confidential, ...'></tag-editor>
 `
 
 ### Suggestions / Auto Complete

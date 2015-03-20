@@ -45,9 +45,10 @@ tagDir = ->
 	
 	replace: true
 	
-	templateUrl: 'tag.html'
+	templateUrl: (elem, attr) ->
+		attr.templateUrl || 'tag.html'
 	
 	controller: [ '$scope', '$attrs', '$element', '$http', tagCtrl ]
 		
-angular.module('ngTag', [])
-angular.module('ngTag').directive 'ngTagEditor', tagDir
+angular.module('ngTagEditor', [])
+angular.module('ngTagEditor').directive 'tagEditor', tagDir

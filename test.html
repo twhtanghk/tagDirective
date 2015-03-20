@@ -9,7 +9,7 @@
 		
 		<script type="text/javascript" src="index.js"></script>
 		<script type="text/javascript">
-			angular.module('app', ['ngTag'])
+			angular.module('app', ['ngTagEditor'])
 				.controller('RandomController', function($scope){
 					$scope.tags = [
 						'See',
@@ -23,7 +23,7 @@
 	</head>
 	<body>
 		<form ng-controller="RandomController">
-			<tag-editor ng-model="tags"></tag-editor>
+			<tag-editor ng-model="tags" template-url='tag.html'></tag-editor>
 			<span class="log">{{tags}}</span>
 		</form>
 	</body>
