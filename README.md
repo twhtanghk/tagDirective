@@ -14,7 +14,9 @@ tagDirective is angular tag directive derived from ngTagEditor
 `
 
 ## Usage
+`
 <tag-editor filter='file/api/tag' placeholder='Tag e.g. Team, Confidential, ...'></tag-editor>
+`
 
 ### Suggestions / Auto Complete
 filter attribute defines url to fetch the suggested tags already defined by user earlier. For example,
