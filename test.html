@@ -18,6 +18,9 @@
 						'is',
 						'AngularJS'
 					];
+					$scope.$watchCollection('tags', function(newtags, oldtags) {
+						console.log('updated');
+					});
 				});
 		</script>
 	</head>

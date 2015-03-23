@@ -1,4 +1,5 @@
-var tagCtrl, tagDir;
+var tagCtrl, tagDir,
+  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 tagCtrl = function($scope, $attrs, $element, $http) {
   $scope = _.extend($scope, {
@@ -9,7 +10,9 @@ tagCtrl = function($scope, $attrs, $element, $http) {
     search: ''
   });
   $scope.add = function(tag) {
-    return $scope.tags.push(tag);
+    if (indexOf.call($scope.tags, tag) < 0) {
+      return $scope.tags.push(tag);
+    }
   };
   $scope.remove = function(deltag) {
     return $scope.tags = _.filter($scope.tags, function(tag) {

@@ -6,7 +6,8 @@ tagCtrl = ($scope, $attrs, $element, $http) ->
 		search:			''
 				
 	$scope.add = (tag) ->
-		$scope.tags.push tag
+		if tag not in $scope.tags
+			$scope.tags.push tag
 		
 	$scope.remove = (deltag) ->
 		$scope.tags = _.filter $scope.tags, (tag) ->
