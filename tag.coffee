@@ -13,8 +13,8 @@ tagCtrl = ($scope, $attrs, $element, $http) ->
 		$scope.tags = _.filter $scope.tags, (tag) ->
 			tag != deltag
 	
-	$scope.$watch 'search', ->
-		if $scope.options.fetch
+	$scope.$watch 'search', (newsearch, oldsearch) ->
+		if newsearch != oldsearch and $scope.options.fetch
 			$http.get("#{$scope.options.fetch}/#{$scope.search}")
 				.then (data) ->
 					$scope.suggestions = data.data

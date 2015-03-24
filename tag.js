@@ -19,8 +19,8 @@ tagCtrl = function($scope, $attrs, $element, $http) {
       return tag !== deltag;
     });
   };
-  $scope.$watch('search', function() {
-    if ($scope.options.fetch) {
+  $scope.$watch('search', function(newsearch, oldsearch) {
+    if (newsearch !== oldsearch && $scope.options.fetch) {
       return $http.get($scope.options.fetch + "/" + $scope.search).then(function(data) {
         return $scope.suggestions = data.data;
       })["catch"](alert);
