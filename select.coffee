@@ -34,7 +34,7 @@ selectDir = ($ionicModal) ->
 					scope.select = (item) ->
 						if not scope.multiple
 							_.each scope.model, (item) ->
-								item.selected = false
+								_.extend item, selected: false
 							item.selected = true
 							scope.close()
 					modal.show()
