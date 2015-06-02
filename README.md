@@ -19,9 +19,7 @@ open browser to visit http://localhost:8080/test/tag.html or select.html
 tags = ['See', 'how', 'amazing', 'is', 'AngularJS' ]
 <tag-editor filter='file/api/tag' ng-model='tags' template-url='../tag.html' placeholder='Tag e.g. Team, Confidential, ...'></tag-editor>
 
-model =
-	models: 		[{text: value, selected: true|false}, ...]
-
+model = [{text: value, selected: true|false}, ...]
 <fancy-select template-url="../select.html" ng-model="model" multiple title="choose countries">
 </fancy-select>
 ```

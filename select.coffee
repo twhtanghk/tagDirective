@@ -1,6 +1,5 @@
 ###
-model =
-	models: 		[{text: value, selected: true|false}, ...]
+model = [{text: value, selected: true|false}, ...]
 
 <fancy-select template-url="../select.html" ng-model="model" multiple title="choose countries">
 </fancy-select>
@@ -20,7 +19,7 @@ selectDir = ($ionicModal) ->
 			title:		attrs.title || 'Select'
 			
 		scope.selected = ->
-			ret = _.map _.where(scope.model.models, selected: true), (item) ->
+			ret = _.map _.where(scope.model, selected: true), (item) ->
 				item.text
 			ret.join(", ")
 			
@@ -33,7 +32,7 @@ selectDir = ($ionicModal) ->
 						modal.remove()
 					scope.select = (item) ->
 						if not scope.multiple
-							_.each scope.model.models, (item) ->
+							_.each scope.model, (item) ->
 								item.selected = false
 							item.selected = true
 							modal.remove()

@@ -16,7 +16,7 @@
 	        <div class="list">
 	          <!-- Multi select -->
 	          <ion-toggle
-	                      ng-repeat="item in model.models"
+	                      ng-repeat="item in model"
 	                      ng-if="multiple"
 	                      ng-checked="item.selected"
 	                      ng-model="item.selected"
@@ -26,7 +26,7 @@
 	
 	          <!-- Single select -->
 	          <label
-	                 ng-repeat="item in model.models"
+	                 ng-repeat="item in model"
 	                 ng-if="!multiple"
 	                 ng-click="select(item)"
 	                 class="item item-text-wrap">

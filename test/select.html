@@ -12,16 +12,14 @@
 		<script type="text/javascript">
 			angular.module('app', ['ngFancySelect', 'ionic'])
 				.controller('RandomController', function($scope){
-					$scope.model = {
-						models: [
-							{text: 'Brazil', selected: false},
-							{text: 'China', selected: true},
-							{text: 'France', selected: false},
-							{text: 'Italy', selected: false},
-							{text: 'Japan', selected: false},
-							{text: 'USA', selected: false}
-						],
-					}
+					$scope.model = [
+						{text: 'Brazil', selected: false},
+						{text: 'China', selected: true},
+						{text: 'France', selected: false},
+						{text: 'Italy', selected: false},
+						{text: 'Japan', selected: false},
+						{text: 'USA', selected: false}
+					];
 				});
 		</script>
 	</head>
