@@ -1,6 +1,7 @@
 # tagDirective
-tagDirective is angular tag directive derived from [ngTagEditor](https://github.com/varyoo/ngTagEditor/blob/master/test.html)
-fancySelect is angular tag directive derived from [Ionic fancySelect](http://codepen.io/mhartington/pen/CImqy)
+tagDirective is an angular directive derived from [ngTagEditor](https://github.com/varyoo/ngTagEditor/blob/master/test.html)
+
+fancySelect is another angular directive derived from [Ionic fancySelect](http://codepen.io/mhartington/pen/CImqy)
 
 ## Installation
 ```
