@@ -10,17 +10,17 @@ paths = sass: ['./scss/**/*.scss']
 gulp.task 'default', ['sass', 'coffee']
 
 gulp.task 'sass', (done) ->
-  gulp.src('./tag.scss')
+  gulp.src('./*.scss')
     .pipe(sass())
     .pipe(gulp.dest('./'))
     
 gulp.task 'coffee', ->
-  browserify(entries: ['./index.coffee'])
+  browserify(entries: ['./test/index.coffee'])
     .transform('coffeeify')
     .transform('debowerify')
     .bundle()
     .pipe(source('index.js'))
-    .pipe(gulp.dest('./'))
+    .pipe(gulp.dest('./test/'))
     
   gulp.src('./tag.coffee')
   	.pipe(coffee({bare: true}).on('error', gutil.log))

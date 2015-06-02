@@ -52,4 +52,4 @@ tagDir = ->
 	controller: [ '$scope', '$attrs', '$element', '$http', tagCtrl ]
 		
 angular.module('ngTagEditor', [])
-angular.module('ngTagEditor').directive 'tagEditor', tagDir
+	.directive 'tagEditor', tagDir

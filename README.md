@@ -1,5 +1,6 @@
 # tagDirective
-tagDirective is angular tag directive derived from ngTagEditor
+tagDirective is angular tag directive derived from [ngTagEditor](https://github.com/varyoo/ngTagEditor/blob/master/test.html)
+fancySelect is angular tag directive derived from [Ionic fancySelect](http://codepen.io/mhartington/pen/CImqy)
 
 ## Installation
 ```
@@ -10,14 +11,20 @@ tagDirective is angular tag directive derived from ngTagEditor
 
 ## Demo
 `
-  open browser to visit http://localhost:8080/test.html
+  open browser to visit http://localhost:8080/test/tag.html or select.html
 `
 
 ## Usage
 `
-<tag-editor filter='file/api/tag' ng-model='tags' template-url='tag.html' placeholder='Tag e.g. Team, Confidential, ...'></tag-editor>
+tags = ['See', 'how', 'amazing', 'is', 'AngularJS' ]
+<tag-editor filter='file/api/tag' ng-model='tags' template-url='../tag.html' placeholder='Tag e.g. Team, Confidential, ...'></tag-editor>
+
+model =
+	models: 		[{text: value, selected: true|false}, ...]
+
+<fancy-select template-url="../select.html" ng-model="model" multiple title="choose countries">
+</fancy-select>
 `
 
 ### Suggestions / Auto Complete
-filter attribute defines url to fetch the suggested tags already defined by user earlier. For example,
-file app with url 'file/api/tag' to fetch tags already defined by current login user. 
+filter attribute defines url to fetch the suggested tags already defined by user earlier. For example, file app with url 'file/api/tag' to fetch tags already defined by current login user. 

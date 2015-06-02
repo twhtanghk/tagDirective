@@ -70,6 +70,4 @@ tagDir = function() {
   };
 };
 
-angular.module('ngTagEditor', []);
-
-angular.module('ngTagEditor').directive('tagEditor', tagDir);
+angular.module('ngTagEditor', []).directive('tagEditor', tagDir);
