@@ -5,13 +5,11 @@ require("./../bower_components/angular-touch/angular-touch.js");
 
 window._ = require("./../bower_components/underscore/underscore.js");
 
-require('../tag.coffee');
-
-require('../select.coffee');
+require('../index.coffee');
 
 
 
-},{"../select.coffee":5,"../tag.coffee":6,"./../bower_components/angular-touch/angular-touch.js":2,"./../bower_components/angular/angular.js":3,"./../bower_components/underscore/underscore.js":4}],2:[function(require,module,exports){
+},{"../index.coffee":5,"./../bower_components/angular-touch/angular-touch.js":2,"./../bower_components/angular/angular.js":3,"./../bower_components/underscore/underscore.js":4}],2:[function(require,module,exports){
 /**
  * @license AngularJS v1.3.15
  * (c) 2010-2014 Google, Inc. http://angularjs.org
@@ -28496,6 +28494,13 @@ var minlengthDirective = function() {
 }.call(this));
 
 },{}],5:[function(require,module,exports){
+require('./tag.coffee');
+
+require('./select.coffee');
+
+
+
+},{"./select.coffee":6,"./tag.coffee":7}],6:[function(require,module,exports){
 
 /*
 model =
@@ -28557,7 +28562,7 @@ angular.module('ngFancySelect', ['ionic']).directive('fancySelect', ['$ionicModa
 
 
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 var tagCtrl, tagDir,
   indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 

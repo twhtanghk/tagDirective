@@ -15,14 +15,16 @@ gulp.task 'sass', (done) ->
     .pipe(gulp.dest('./'))
     
 gulp.task 'coffee', ->
+  browserify(entries: ['./index.coffee'])
+    .transform('coffeeify')
+    .transform('debowerify')
+    .bundle()
+    .pipe(source('index.js'))
+    .pipe(gulp.dest('./'))
+  
   browserify(entries: ['./test/index.coffee'])
     .transform('coffeeify')
     .transform('debowerify')
     .bundle()
     .pipe(source('index.js'))
     .pipe(gulp.dest('./test/'))
-    
-  gulp.src('./tag.coffee')
-  	.pipe(coffee({bare: true}).on('error', gutil.log))
-    .pipe(gulp.dest('./'))
-  
