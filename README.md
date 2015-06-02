@@ -11,12 +11,11 @@ fancySelect is another angular directive derived from [Ionic fancySelect](http:/
 ```
 
 ## Demo
-`
-  open browser to visit http://localhost:8080/test/tag.html or select.html
-`
+open browser to visit http://localhost:8080/test/tag.html or select.html
+
 
 ## Usage
-`
+```
 tags = ['See', 'how', 'amazing', 'is', 'AngularJS' ]
 <tag-editor filter='file/api/tag' ng-model='tags' template-url='../tag.html' placeholder='Tag e.g. Team, Confidential, ...'></tag-editor>
 
@@ -25,7 +24,7 @@ model =
 
 <fancy-select template-url="../select.html" ng-model="model" multiple title="choose countries">
 </fancy-select>
-`
+```
 
 ### Suggestions / Auto Complete
 filter attribute defines url to fetch the suggested tags already defined by user earlier. For example, file app with url 'file/api/tag' to fetch tags already defined by current login user. 
