@@ -26,16 +26,18 @@ selectDir = ($ionicModal) ->
 		scope.click = (event) ->
 			$ionicModal.fromTemplateUrl("fancy-select-items.html", scope: scope)
 				.then (modal) ->
-					modal.show()
 					scope.modal = modal
 					scope.close = ->
+						scope.$emit 'selected', _.map _.where(scope.model, selected: true), (item) ->
+							item.text 
 						modal.remove()
 					scope.select = (item) ->
 						if not scope.multiple
 							_.each scope.model, (item) ->
 								item.selected = false
 							item.selected = true
-							modal.remove()
+							scope.close()
+					modal.show()
 					
 angular.module('ngFancySelect', ['ionic'])
 	.directive 'fancySelect', ['$ionicModal', selectDir]

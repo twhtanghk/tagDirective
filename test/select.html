@@ -20,6 +20,10 @@
 						{text: 'Japan', selected: false},
 						{text: 'USA', selected: false}
 					];
+					$scope.$on('selected', function(event, selected) { 
+						console.log(JSON.stringify(selected)); 
+					});
+					
 				});
 		</script>
 	</head>

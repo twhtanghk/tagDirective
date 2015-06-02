@@ -28537,20 +28537,25 @@ selectDir = function($ionicModal) {
         return $ionicModal.fromTemplateUrl("fancy-select-items.html", {
           scope: scope
         }).then(function(modal) {
-          modal.show();
           scope.modal = modal;
           scope.close = function() {
+            scope.$emit('selected', _.map(_.where(scope.model, {
+              selected: true
+            }), function(item) {
+              return item.text;
+            }));
             return modal.remove();
           };
-          return scope.select = function(item) {
+          scope.select = function(item) {
             if (!scope.multiple) {
               _.each(scope.model, function(item) {
                 return item.selected = false;
               });
               item.selected = true;
-              return modal.remove();
+              return scope.close();
             }
           };
+          return modal.show();
         });
       };
     }
