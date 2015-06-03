@@ -28549,7 +28549,9 @@ selectDir = function($ionicModal) {
           scope.select = function(item) {
             if (!scope.multiple) {
               _.each(scope.model, function(item) {
-                return item.selected = false;
+                return _.extend(item, {
+                  selected: false
+                });
               });
               item.selected = true;
               return scope.close();
