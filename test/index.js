@@ -28503,7 +28503,7 @@ require('./select.coffee');
 },{"./select.coffee":6,"./tag.coffee":7}],6:[function(require,module,exports){
 
 /*
-model = [{text: value, selected: true|false}, ...]
+model = [{label1: value1, selected: true|false}, {label2: value2, selected: true|false}...]
 
 <fancy-select template-url="../select.html" ng-model="model" multiple title="choose countries">
 </fancy-select>
@@ -28512,6 +28512,7 @@ var selectDir;
 
 selectDir = function($ionicModal) {
   return {
+    restrict: 'E',
     scope: {
       model: '=ngModel'
     },

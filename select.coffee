@@ -1,10 +1,12 @@
 ###
-model = [{text: value, selected: true|false}, ...]
+model = [{label1: value1, selected: true|false}, {label2: value2, selected: true|false}...]
 
 <fancy-select template-url="../select.html" ng-model="model" multiple title="choose countries">
 </fancy-select>
 ###
 selectDir = ($ionicModal) ->
+	restrict:	'E'
+	
 	scope:
 		model:	'=ngModel'
 			
