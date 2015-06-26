@@ -22,7 +22,7 @@ selectDir = ($ionicModal) ->
 			
 		scope.selected = ->
 			ret = _.map _.where(scope.model, selected: true), (item) ->
-				item.value
+				item.label
 			ret.join(", ")
 			
 		scope.click = (event) ->
