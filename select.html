@@ -21,7 +21,7 @@
 	                      ng-checked="item.selected"
 	                      ng-model="item.selected"
 	                      class="item item-text-wrap">
-	            {{item.text}}
+	            {{item.label}}
 	          </ion-toggle>
 	
 	          <!-- Single select -->
@@ -30,7 +30,7 @@
 	                 ng-if="!multiple"
 	                 ng-click="select(item)"
 	                 class="item item-text-wrap">
-	            {{item.text}}
+	            {{item.label}}
 	          </label>
 	        </div>
 	      </ion-content>

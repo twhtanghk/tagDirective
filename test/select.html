@@ -13,12 +13,12 @@
 			angular.module('app', ['ngFancySelect', 'ionic'])
 				.controller('RandomController', function($scope){
 					$scope.model = [
-						{text: 'Brazil', selected: false},
-						{text: 'China', selected: true},
-						{text: 'France', selected: false},
-						{text: 'Italy', selected: false},
-						{text: 'Japan', selected: false},
-						{text: 'USA', selected: false}
+						{label: 'Brazil', value: 'Brazil', selected: false},
+						{label: 'China', value: 'China', selected: true},
+						{label: 'France', value: 'France', selected: false},
+						{label: 'Italy', value: 'Italy', selected: false},
+						{label: 'Japan', value: 'Japan', selected: false},
+						{label: 'USA', value: 'USA',selected: false}
 					];
 					$scope.$on('selected', function(event, selected) { 
 						console.log(JSON.stringify(selected)); 
