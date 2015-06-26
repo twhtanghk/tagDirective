@@ -28530,7 +28530,7 @@ selectDir = function($ionicModal) {
         ret = _.map(_.where(scope.model, {
           selected: true
         }), function(item) {
-          return item.value;
+          return item.label;
         });
         return ret.join(", ");
       };
