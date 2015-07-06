@@ -47,14 +47,15 @@ selectDir = ($ionicModal) ->
 ###
 collection = [model1, model2, ...] where model attribute "selected" is defined to be true, false or undefined 
 
-<fancy-select-model template-url="../select.html" ng-model="collection" label="name" multiple title="choose countries">
+<fancy-select-model template-url="../selectModel.html" ng-selected="selected" ng-model="collection" label="label" title="Choose country from collection">
 </fancy-select-model>
 ###
 selectModelDir = ($ionicModal) ->
 	restrict:	'E'
 	
 	scope:
-		model:	'=ngModel'
+		selected:	'=ngSelected'
+		model:		'=ngModel'
 			
 	replace:	true
 	
@@ -69,7 +70,7 @@ selectModelDir = ($ionicModal) ->
 
 			label:		attrs.label
 
-			selected:	 ->
+			selectedTitle:	 ->
 				selected = _.where scope.model, selected: true 
 				if selected.length == 0 
 					return null
@@ -79,12 +80,19 @@ selectModelDir = ($ionicModal) ->
 			click:		(event) ->
 				$ionicModal.fromTemplateUrl("fancy-select-models.html", scope: scope)
 					.then (modal) ->
-						scope.modal = modal
-						scope.select = (item) ->
-							if not scope.multiple
+						_.extend scope,
+							modal:	modal
+							select: (item) ->
+								if not scope.multiple
+									_.each scope.model, (item) ->
+										_.extend item, selected: false
+									item.selected = true
+									scope.close()
+							close:	->
+								scope.selected.length = 0
 								_.each scope.model, (item) ->
-									_.extend item, selected: false
-								item.selected = true
+									if item.selected
+										scope.selected.push item
 								modal.remove()
 						modal.show()
 

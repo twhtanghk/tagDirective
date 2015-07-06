@@ -28575,7 +28575,7 @@ selectDir = function($ionicModal) {
 /*
 collection = [model1, model2, ...] where model attribute "selected" is defined to be true, false or undefined 
 
-<fancy-select-model template-url="../select.html" ng-model="collection" label="name" multiple title="choose countries">
+<fancy-select-model template-url="../select.html" ng-selected="selected" ng-model="collection" label="name" multiple title="choose countries">
 </fancy-select-model>
  */
 
@@ -28583,6 +28583,7 @@ selectModelDir = function($ionicModal) {
   return {
     restrict: 'E',
     scope: {
+      selected: '=ngSelected',
       model: '=ngModel'
     },
     replace: true,
@@ -28594,7 +28595,7 @@ selectModelDir = function($ionicModal) {
         multiple: 'multiple' in attrs && attrs.multiple !== 'false',
         title: attrs.title || 'Select',
         label: attrs.label,
-        selected: function() {
+        selectedTitle: function() {
           var selected;
           selected = _.where(scope.model, {
             selected: true
@@ -28613,18 +28614,29 @@ selectModelDir = function($ionicModal) {
           return $ionicModal.fromTemplateUrl("fancy-select-models.html", {
             scope: scope
           }).then(function(modal) {
-            scope.modal = modal;
-            scope.select = function(item) {
-              if (!scope.multiple) {
-                _.each(scope.model, function(item) {
-                  return _.extend(item, {
-                    selected: false
+            _.extend(scope, {
+              modal: modal,
+              select: function(item) {
+                if (!scope.multiple) {
+                  _.each(scope.model, function(item) {
+                    return _.extend(item, {
+                      selected: false
+                    });
                   });
+                  item.selected = true;
+                  return scope.close();
+                }
+              },
+              close: function() {
+                scope.selected.length = 0;
+                _.each(scope.model, function(item) {
+                  if (item.selected) {
+                    return scope.selected.push(item);
+                  }
                 });
-                item.selected = true;
                 return modal.remove();
               }
-            };
+            });
             return modal.show();
           });
         }

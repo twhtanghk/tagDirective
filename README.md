@@ -23,8 +23,8 @@ collection = [{label: label1, value: value1, selected: true|false}, {label: labe
 <fancy-select template-url="../select.html" ng-model="collection" multiple title="choose countries">
 </fancy-select>
 
-<fancy-select-model template-url="../selectModel.html" ng-model="collection" multiple label="label" title="Choose country from collection">
-</fancy-select-model>
+<fancy-select-model template-url="../selectModel.html" ng-selected="selected" ng-model="collection" label="label" multiple title="Choose countries from collection">
+</fancy-select-model>	
 ```
 
 ### Suggestions / Auto Complete

@@ -20,6 +20,7 @@
 						{label: 'Japan', value: 'Japan', selected: false},
 						{label: 'USA', value: 'USA',selected: false}
 					];
+					$scope.selected = [ $scope.collection[1] ];
 					$scope.$on('selected', function(event, selected) { 
 						console.log(JSON.stringify(selected)); 
 						console.log(JSON.stringify($scope.collection));
@@ -32,9 +33,9 @@
 		</fancy-select>
 		<fancy-select template-url="../select.html" ng-model="collection" multiple title="Choose countries">
 		</fancy-select>
-		<fancy-select-model template-url="../selectModel.html" ng-model="collection" label="label" title="Choose country from collection">
+		<fancy-select-model template-url="../selectModel.html" ng-selected="selected" ng-model="collection" label="label" title="Choose country from collection">
 		</fancy-select-model>
-		<fancy-select-model template-url="../selectModel.html" ng-model="collection" label="label" multiple title="Choose countries from collection">
+		<fancy-select-model template-url="../selectModel.html" ng-selected="selected" ng-model="collection" label="label" multiple title="Choose countries from collection">
 		</fancy-select-model>
 	</body>
 </html>
