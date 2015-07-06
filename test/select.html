@@ -12,7 +12,7 @@
 		<script type="text/javascript">
 			angular.module('app', ['ngFancySelect', 'ionic'])
 				.controller('RandomController', function($scope){
-					$scope.model = [
+					$scope.collection = [
 						{label: 'Brazil', value: 'Brazil', selected: false},
 						{label: 'China', value: 'China', selected: true},
 						{label: 'France', value: 'France', selected: false},
@@ -22,16 +22,19 @@
 					];
 					$scope.$on('selected', function(event, selected) { 
 						console.log(JSON.stringify(selected)); 
-						console.log(JSON.stringify($scope.model));
+						console.log(JSON.stringify($scope.collection));
 					});
-					
 				});
 		</script>
 	</head>
 	<body ng-controller="RandomController">
-		<fancy-select template-url="../select.html" ng-model="model" title="Choose country">
+		<fancy-select template-url="../select.html" ng-model="collection" title="Choose country">
 		</fancy-select>
-		<fancy-select template-url="../select.html" ng-model="model" multiple title="Choose countries">
+		<fancy-select template-url="../select.html" ng-model="collection" multiple title="Choose countries">
 		</fancy-select>
+		<fancy-select-model template-url="../selectModel.html" ng-model="collection" label="label" title="Choose country from collection">
+		</fancy-select-model>
+		<fancy-select-model template-url="../selectModel.html" ng-model="collection" label="label" multiple title="Choose countries from collection">
+		</fancy-select-model>
 	</body>
 </html>

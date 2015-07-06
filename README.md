@@ -1,7 +1,7 @@
 # tagDirective
 tagDirective is an angular directive derived from [ngTagEditor](https://github.com/varyoo/ngTagEditor/blob/master/test.html)
 
-fancySelect is another angular directive derived from [Ionic fancySelect](http://codepen.io/mhartington/pen/CImqy)
+fancySelect and fancySelectModel is another angular directive derived from [Ionic fancySelect](http://codepen.io/mhartington/pen/CImqy)
 
 ## Installation
 ```
@@ -19,9 +19,12 @@ open browser to visit http://localhost:8080/test/tag.html or select.html
 tags = ['See', 'how', 'amazing', 'is', 'AngularJS' ]
 <tag-editor filter='file/api/tag' ng-model='tags' template-url='../tag.html' placeholder='Tag e.g. Team, Confidential, ...'></tag-editor>
 
-model = [{label: label1, value: value1, selected: true|false}, {label: label2, value: value2, selected: true|false}...]
-<fancy-select template-url="../select.html" ng-model="model" multiple title="choose countries">
+collection = [{label: label1, value: value1, selected: true|false}, {label: label2, value: value2, selected: true|false}...]
+<fancy-select template-url="../select.html" ng-model="collection" multiple title="choose countries">
 </fancy-select>
+
+<fancy-select-model template-url="../selectModel.html" ng-model="collection" multiple label="label" title="Choose country from collection">
+</fancy-select-model>
 ```
 
 ### Suggestions / Auto Complete
