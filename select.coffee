@@ -1,14 +1,67 @@
 ###
-model = [{label: label1, value: value1, selected: true|false}, {label: label2, value: value2, selected: true|false}...]
+select from array of primitive
 
-<fancy-select template-url="../select.html" ng-model="model" multiple title="choose countries">
-</fancy-select>
+<fancy-select template-url="../select.html" ng-selected="simpleSelected" ng-model="simple" multiple title="Choose countries">
+</fancy-select>		
 ###
 selectDir = ($ionicModal) ->
 	restrict:	'E'
 	
 	scope:
-		model:	'=ngModel'
+		selected:	'=ngSelected'
+		model:		'=ngModel'
+			
+	replace:	true
+	
+	templateUrl: (element, attrs) ->
+		attrs.templateUrl || '../select.html'
+		
+	link: (scope, element, attrs) ->
+		_.extend scope, 
+			multiple:	'multiple' of attrs && attrs.multiple != 'false'
+
+			title:		attrs.title || 'Select'
+
+			selectedTitle:	 ->
+				if scope.selected.length == 0 
+					return scope.title
+				else
+					return if scope.multiple then "#{scope.selected.length} Selected" else scope.selected 
+			
+			click:		(event) ->
+				$ionicModal.fromTemplateUrl("fancy-select.html", scope: scope)
+					.then (modal) ->
+						_.extend scope,
+							modal:	modal
+							
+							close:	->
+								modal.remove()
+							
+							select: (item) ->
+								if scope.multiple
+									if item.selected
+										scope.selected = _.uniq _.union(scope.selected, [item.label]), true
+									else
+										scope.selected = _.difference scope.selected, [item.label]
+								else
+									scope.selected = item.label
+									scope.close()
+									
+						modal.show()
+
+
+###
+select from array of object
+
+<fancy-select-object template-url="../select.html" ng-selected="objSelected" ng-model="object" multiple title="Choose currencies">
+</fancy-select-object>
+###
+selectObjectDir = ($ionicModal) ->
+	restrict:	'E'
+	
+	scope:
+		selected:	'=ngSelected'
+		model:		'=ngModel'
 			
 	replace:	true
 	
@@ -21,33 +74,61 @@ selectDir = ($ionicModal) ->
 			
 			title:		attrs.title || 'Select'
 			
-			selected:	->
-				selected = _.where scope.model, selected: true 
+			selectedTitle:	->
+				selected = scope.selected
 				if selected.length == 0 
-					return null
+					return scope.title
 				else
-					return if scope.multiple then "#{selected.length} Selected" else selected[0].label
+					return if scope.multiple then "#{selected.length} Selected" else selected.label
 			
 			click:		(event) ->
-				$ionicModal.fromTemplateUrl("fancy-select-items.html", scope: scope)
+				selected =
+					clearModel: ->
+						_.each scope.model, (item) ->
+							item.selected = false
+							return item
+					
+					fromModel: ->
+						if scope.multiple
+							scope.selected.length = 0
+							scope.selected = _.union scope.selected, _.where(scope.model, selected: true)
+						else
+							scope.selected = _.findWhere scope.model, selected: true
+						
+					toModel: ->
+						if scope.multiple
+							_.each scope.selected, (item) ->
+								found = _.findWhere scope.model, label: item.label
+								found?.selected = true
+								return item
+						else
+							found = _.findWhere scope.model, label: scope.selected.label
+							found?.selected = true
+				
+				selected.clearModel()
+				selected.toModel()
+						
+				$ionicModal.fromTemplateUrl("fancy-select-object.html", scope: scope)
 					.then (modal) ->
-						scope.modal = modal
-						scope.close = ->
-							scope.$emit 'selected', _.map _.where(scope.model, selected: true), (item) ->
-								item.value 
-							modal.remove()
-						scope.select = (item) ->
-							if not scope.multiple
-								_.each scope.model, (item) ->
-									_.extend item, selected: false
-								item.selected = true
-								scope.close()
+						_.extend scope, 
+							modal: modal
+							
+							close: ->
+								selected.fromModel()
+								modal.remove()
+								
+							select: (item) ->
+								if not scope.multiple
+									selected.clearModel()
+									item.selected = true
+									scope.close()
+									
 						modal.show()
 					
 ###
-collection = [model1, model2, ...] where model attribute "selected" is defined to be true, false or undefined 
+select from pageableAR.collection
 
-<fancy-select-model template-url="../selectModel.html" ng-selected="selected" ng-model="collection" label="label" title="Choose country from collection">
+<fancy-select-model template-url="../selectModel.html" ng-selected="selected" ng-model="collection" label="fullname" title="Select users">
 </fancy-select-model>
 ###
 selectModelDir = ($ionicModal) ->
@@ -60,7 +141,7 @@ selectModelDir = ($ionicModal) ->
 	replace:	true
 	
 	templateUrl: (element, attrs) ->
-		attrs.templateUrl || '../selectModel.html'
+		attrs.templateUrl || '../select.html'
 		
 	link: (scope, element, attrs) ->
 		_.extend scope, 
@@ -71,31 +152,65 @@ selectModelDir = ($ionicModal) ->
 			label:		attrs.label
 
 			selectedTitle:	 ->
-				selected = _.where scope.model, selected: true 
+				selected = scope.selected 
 				if selected.length == 0 
-					return null
+					return scope.title
 				else
-					return if scope.multiple then "#{selected.length} Selected" else selected[0][scope.label] 
+					return if scope.multiple then "#{selected.length} Selected" else selected[scope.label] 
 			
 			click:		(event) ->
-				$ionicModal.fromTemplateUrl("fancy-select-models.html", scope: scope)
+				selected =
+					clearModel: ->
+						_.each scope.model.models, (item) ->
+							item.selected = false
+							return item
+					
+					fromModel: ->
+						if scope.multiple
+							scope.selected.length = 0
+							scope.selected = _.union scope.selected, _.where(scope.model.models, selected: true)
+						else
+							scope.selected = _.findWhere scope.model.models, selected: true
+						
+					toModel: (start = 0, end = scope.model.models.length) ->
+						if scope.multiple
+							_.each scope.selected, (item, index) ->
+								found = _.findWhere _.slice(scope.model.models, start, end), id: item.id
+								found?.selected = true
+								return item
+						else
+							found = _.findWhere _.slice(scope.model.models, start, end), id: scope.selected.id
+							found?.selected = true
+				
+				selected.clearModel()
+				selected.toModel()
+				
+				$ionicModal.fromTemplateUrl("fancy-select-model.html", scope: scope)
 					.then (modal) ->
 						_.extend scope,
-							modal:	modal
+							modal: modal
+							
+							close: ->
+								selected.fromModel()
+								modal.remove()
+								
 							select: (item) ->
 								if not scope.multiple
-									_.each scope.model, (item) ->
-										_.extend item, selected: false
+									selected.clearModel()
 									item.selected = true
 									scope.close()
-							close:	->
-								scope.selected.length = 0
-								_.each scope.model, (item) ->
-									if item.selected
-										scope.selected.push item
-								modal.remove()
+							
+							loadMore: ->
+								if scope.model.state
+									skip = scope.model.state.skip
+									scope.model.$fetch()
+										.then ->
+											selected.toModel(skip, scope.model.models.length)
+											scope.$broadcast('scroll.infiniteScrollComplete')
+										.catch alert
 						modal.show()
 
 angular.module('ngFancySelect', ['ionic'])
 	.directive 'fancySelect', ['$ionicModal', selectDir]
+	.directive 'fancySelectObject', ['$ionicModal', selectObjectDir]
 	.directive 'fancySelectModel', ['$ionicModal', selectModelDir]

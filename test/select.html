@@ -11,31 +11,40 @@
 		<script type="text/javascript" src="index.js"></script>
 		<script type="text/javascript">
 			angular.module('app', ['ngFancySelect', 'ionic'])
-				.controller('RandomController', function($scope){
-					$scope.collection = [
-						{label: 'Brazil', value: 'Brazil', selected: false},
-						{label: 'China', value: 'China', selected: true},
-						{label: 'France', value: 'France', selected: false},
-						{label: 'Italy', value: 'Italy', selected: false},
-						{label: 'Japan', value: 'Japan', selected: false},
-						{label: 'USA', value: 'USA',selected: false}
+				.controller('RandomController', function($scope) {
+					$scope.simple = [ 'Brazil', 'China', 'France', 'Italy', 'Japan', 'USA' ];
+					$scope.object = [
+						{label: 'Brazil', value: 'BRL', selected: false},
+						{label: 'China', value: 'CNY', selected: true},
+						{label: 'France', value: 'EUR', selected: false},
+						{label: 'Italy', value: 'EUR', selected: false},
+						{label: 'Japan', value: 'JPY', selected: false},
+						{label: 'USA', value: 'USD',selected: false}
 					];
-					$scope.selected = [ $scope.collection[1] ];
-					$scope.$on('selected', function(event, selected) { 
-						console.log(JSON.stringify(selected)); 
-						console.log(JSON.stringify($scope.collection));
-					});
+					$scope.selected = [
+						'China',
+						['France', 'Italy'],
+						{label: 'China', value: 'CNY', selected: true},
+						[
+							{label: 'France', value: 'EUR', selected: false},
+							{label: 'Italy', value: 'EUR', selected: false}
+						]
+					];
+					log = function() { 
+						console.log(JSON.stringify($scope.selected)); 
+					}
+					setInterval(log, 3000);
 				});
 		</script>
 	</head>
 	<body ng-controller="RandomController">
-		<fancy-select template-url="../select.html" ng-model="collection" title="Choose country">
+		<fancy-select ng-selected="selected[0]" ng-model="simple" title="Choose country">
 		</fancy-select>
-		<fancy-select template-url="../select.html" ng-model="collection" multiple title="Choose countries">
+		<fancy-select ng-selected="selected[1]" ng-model="simple" multiple title="Choose countries">
 		</fancy-select>
-		<fancy-select-model template-url="../selectModel.html" ng-selected="selected" ng-model="collection" label="label" title="Choose country from collection">
-		</fancy-select-model>
-		<fancy-select-model template-url="../selectModel.html" ng-selected="selected" ng-model="collection" label="label" multiple title="Choose countries from collection">
-		</fancy-select-model>
+		<fancy-select-object ng-selected="selected[2]" ng-model="object" title="Choose currency">
+		</fancy-select-object>
+		<fancy-select-object ng-selected="selected[3]" ng-model="object" multiple title="Choose currencies">
+		</fancy-select-object>
 	</body>
 </html>

@@ -3,22 +3,81 @@ require('./tag.coffee');
 
 require('./select.coffee');
 
+require('./icon.coffee');
 
 
-},{"./select.coffee":2,"./tag.coffee":3}],2:[function(require,module,exports){
+
+},{"./icon.coffee":2,"./select.coffee":3,"./tag.coffee":4}],2:[function(require,module,exports){
 
 /*
-model = [{label: label1, value: value1, selected: true|false}, {label: label2, value: value2, selected: true|false}...]
+icon tag to show specified src file or ionic icon if src is not defined  
 
-<fancy-select template-url="../select.html" ng-model="model" multiple title="choose countries">
+<icon class="photoEdit" 
+	ng-src="model.photoUrl"
+	ngf-select ngf-multiple='false' 
+	ngf-change="select($files)" 
+	ngf-accept="'image/*'"
+	aria-label="{{model.name}}"
+	otherwise="icon ion-android-people">
+ */
+var iconDir;
+
+iconDir = function($compile) {
+  return {
+    restrict: 'E',
+    scope: {
+      src: '=ngSrc',
+      label: '@ariaLabel',
+      otherwise: '@otherwise',
+      "class": '@'
+    },
+    link: function(scope, elem, attrs) {
+      var html;
+      _.defaults(scope, {
+        label: '',
+        "class": ''
+      });
+      html = function(replace) {
+        var template;
+        template = "<i class='" + scope["class"] + " " + scope.otherwise + "'></i>";
+        if (scope.src) {
+          template = "<img class='" + scope["class"] + "' src='" + scope.src + "' aria-label='" + scope.label + "'>";
+        }
+        if (replace) {
+          return elem.replaceWith(template);
+        } else {
+          return elem.html(template);
+        }
+      };
+      html(scope.replace);
+      return scope.$watch('src', function(newvalue, oldvalue) {
+        if (newvalue !== oldvalue) {
+          return html(scope.replace);
+        }
+      });
+    }
+  };
+};
+
+angular.module('ngIcon', ['ionic']).directive('icon', ['$compile', iconDir]);
+
+
+
+},{}],3:[function(require,module,exports){
+
+/*
+select from array of primitive
+
+<fancy-select template-url="../select.html" ng-selected="simpleSelected" ng-model="simple" multiple title="Choose countries">
 </fancy-select>
  */
-var selectDir, selectModelDir;
+var selectDir, selectModelDir, selectObjectDir;
 
 selectDir = function($ionicModal) {
   return {
     restrict: 'E',
     scope: {
+      selected: '=ngSelected',
       model: '=ngModel'
     },
     replace: true,
@@ -29,45 +88,39 @@ selectDir = function($ionicModal) {
       return _.extend(scope, {
         multiple: 'multiple' in attrs && attrs.multiple !== 'false',
         title: attrs.title || 'Select',
-        selected: function() {
-          var selected;
-          selected = _.where(scope.model, {
-            selected: true
-          });
-          if (selected.length === 0) {
-            return null;
+        selectedTitle: function() {
+          if (scope.selected.length === 0) {
+            return scope.title;
           } else {
             if (scope.multiple) {
-              return selected.length + " Selected";
+              return scope.selected.length + " Selected";
             } else {
-              return selected[0].label;
+              return scope.selected;
             }
           }
         },
         click: function(event) {
-          return $ionicModal.fromTemplateUrl("fancy-select-items.html", {
+          return $ionicModal.fromTemplateUrl("fancy-select.html", {
             scope: scope
           }).then(function(modal) {
-            scope.modal = modal;
-            scope.close = function() {
-              scope.$emit('selected', _.map(_.where(scope.model, {
-                selected: true
-              }), function(item) {
-                return item.value;
-              }));
-              return modal.remove();
-            };
-            scope.select = function(item) {
-              if (!scope.multiple) {
-                _.each(scope.model, function(item) {
-                  return _.extend(item, {
-                    selected: false
-                  });
-                });
-                item.selected = true;
-                return scope.close();
+            _.extend(scope, {
+              modal: modal,
+              close: function() {
+                return modal.remove();
+              },
+              select: function(item) {
+                if (scope.multiple) {
+                  if (item.selected) {
+                    return scope.selected = _.uniq(_.union(scope.selected, [item.label]), true);
+                  } else {
+                    return scope.selected = _.difference(scope.selected, [item.label]);
+                  }
+                } else {
+                  scope.selected = item.label;
+                  return scope.close();
+                }
               }
-            };
+            });
             return modal.show();
           });
         }
@@ -78,9 +131,114 @@ selectDir = function($ionicModal) {
 
 
 /*
-collection = [model1, model2, ...] where model attribute "selected" is defined to be true, false or undefined 
+select from array of object
 
-<fancy-select-model template-url="../select.html" ng-selected="selected" ng-model="collection" label="name" multiple title="choose countries">
+<fancy-select-object template-url="../select.html" ng-selected="objSelected" ng-model="object" multiple title="Choose currencies">
+</fancy-select-object>
+ */
+
+selectObjectDir = function($ionicModal) {
+  return {
+    restrict: 'E',
+    scope: {
+      selected: '=ngSelected',
+      model: '=ngModel'
+    },
+    replace: true,
+    templateUrl: function(element, attrs) {
+      return attrs.templateUrl || '../select.html';
+    },
+    link: function(scope, element, attrs) {
+      return _.extend(scope, {
+        multiple: 'multiple' in attrs && attrs.multiple !== 'false',
+        title: attrs.title || 'Select',
+        selectedTitle: function() {
+          var selected;
+          selected = scope.selected;
+          if (selected.length === 0) {
+            return scope.title;
+          } else {
+            if (scope.multiple) {
+              return selected.length + " Selected";
+            } else {
+              return selected.label;
+            }
+          }
+        },
+        click: function(event) {
+          var selected;
+          selected = {
+            clearModel: function() {
+              return _.each(scope.model, function(item) {
+                item.selected = false;
+                return item;
+              });
+            },
+            fromModel: function() {
+              if (scope.multiple) {
+                scope.selected.length = 0;
+                return scope.selected = _.union(scope.selected, _.where(scope.model, {
+                  selected: true
+                }));
+              } else {
+                return scope.selected = _.findWhere(scope.model, {
+                  selected: true
+                });
+              }
+            },
+            toModel: function() {
+              var found;
+              if (scope.multiple) {
+                return _.each(scope.selected, function(item) {
+                  var found;
+                  found = _.findWhere(scope.model, {
+                    label: item.label
+                  });
+                  if (found != null) {
+                    found.selected = true;
+                  }
+                  return item;
+                });
+              } else {
+                found = _.findWhere(scope.model, {
+                  label: scope.selected.label
+                });
+                return found != null ? found.selected = true : void 0;
+              }
+            }
+          };
+          selected.clearModel();
+          selected.toModel();
+          return $ionicModal.fromTemplateUrl("fancy-select-object.html", {
+            scope: scope
+          }).then(function(modal) {
+            _.extend(scope, {
+              modal: modal,
+              close: function() {
+                selected.fromModel();
+                return modal.remove();
+              },
+              select: function(item) {
+                if (!scope.multiple) {
+                  selected.clearModel();
+                  item.selected = true;
+                  return scope.close();
+                }
+              }
+            });
+            return modal.show();
+          });
+        }
+      });
+    }
+  };
+};
+
+
+/*
+select from pageableAR.collection
+
+<fancy-select-model template-url="../selectModel.html" ng-selected="selected" ng-model="collection" label="fullname" title="Select users">
 </fancy-select-model>
  */
 
@@ -93,7 +251,7 @@ selectModelDir = function($ionicModal) {
     },
     replace: true,
     templateUrl: function(element, attrs) {
-      return attrs.templateUrl || '../selectModel.html';
+      return attrs.templateUrl || '../select.html';
     },
     link: function(scope, element, attrs) {
       return _.extend(scope, {
@@ -102,44 +260,92 @@ selectModelDir = function($ionicModal) {
         label: attrs.label,
         selectedTitle: function() {
           var selected;
-          selected = _.where(scope.model, {
-            selected: true
-          });
+          selected = scope.selected;
           if (selected.length === 0) {
-            return null;
+            return scope.title;
           } else {
             if (scope.multiple) {
               return selected.length + " Selected";
             } else {
-              return selected[0][scope.label];
+              return selected[scope.label];
             }
           }
         },
         click: function(event) {
-          return $ionicModal.fromTemplateUrl("fancy-select-models.html", {
+          var selected;
+          selected = {
+            clearModel: function() {
+              return _.each(scope.model.models, function(item) {
+                item.selected = false;
+                return item;
+              });
+            },
+            fromModel: function() {
+              if (scope.multiple) {
+                scope.selected.length = 0;
+                return scope.selected = _.union(scope.selected, _.where(scope.model.models, {
+                  selected: true
+                }));
+              } else {
+                return scope.selected = _.findWhere(scope.model.models, {
+                  selected: true
+                });
+              }
+            },
+            toModel: function(start, end) {
+              var found;
+              if (start == null) {
+                start = 0;
+              }
+              if (end == null) {
+                end = scope.model.models.length;
+              }
+              if (scope.multiple) {
+                return _.each(scope.selected, function(item, index) {
+                  var found;
+                  found = _.findWhere(_.slice(scope.model.models, start, end), {
+                    id: item.id
+                  });
+                  if (found != null) {
+                    found.selected = true;
+                  }
+                  return item;
+                });
+              } else {
+                found = _.findWhere(_.slice(scope.model.models, start, end), {
+                  id: scope.selected.id
+                });
+                return found != null ? found.selected = true : void 0;
+              }
+            }
+          };
+          selected.clearModel();
+          selected.toModel();
+          return $ionicModal.fromTemplateUrl("fancy-select-model.html", {
             scope: scope
           }).then(function(modal) {
             _.extend(scope, {
               modal: modal,
+              close: function() {
+                selected.fromModel();
+                return modal.remove();
+              },
               select: function(item) {
                 if (!scope.multiple) {
-                  _.each(scope.model, function(item) {
-                    return _.extend(item, {
-                      selected: false
-                    });
-                  });
+                  selected.clearModel();
                   item.selected = true;
                   return scope.close();
                 }
               },
-              close: function() {
-                scope.selected.length = 0;
-                _.each(scope.model, function(item) {
-                  if (item.selected) {
-                    return scope.selected.push(item);
-                  }
-                });
-                return modal.remove();
+              loadMore: function() {
+                var skip;
+                if (scope.model.state) {
+                  skip = scope.model.state.skip;
+                  return scope.model.$fetch().then(function() {
+                    selected.toModel(skip, scope.model.models.length);
+                    return scope.$broadcast('scroll.infiniteScrollComplete');
+                  })["catch"](alert);
+                }
               }
             });
             return modal.show();
@@ -150,11 +356,11 @@ selectModelDir = function($ionicModal) {
   };
 };
 
-angular.module('ngFancySelect', ['ionic']).directive('fancySelect', ['$ionicModal', selectDir]).directive('fancySelectModel', ['$ionicModal', selectModelDir]);
+angular.module('ngFancySelect', ['ionic']).directive('fancySelect', ['$ionicModal', selectDir]).directive('fancySelectObject', ['$ionicModal', selectObjectDir]).directive('fancySelectModel', ['$ionicModal', selectModelDir]);
 
 
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 var tagCtrl, tagDir,
   indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
