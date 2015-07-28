@@ -102,6 +102,8 @@
 	            {{item[label]}}
 	          </label>
 	        </div>
+	        <ion-infinite-scroll ng-if="model.state.skip < model.state.count" on-infinite="loadMore()">
+			</ion-infinite-scroll>
 	      </ion-content>
 	    </ion-view>
 	</script>
