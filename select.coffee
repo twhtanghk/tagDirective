@@ -4,7 +4,7 @@ select from array of primitive
 <fancy-select template-url="../select.html" ng-selected="simpleSelected" ng-model="simple" multiple title="Choose countries">
 </fancy-select>		
 ###
-selectDir = ($ionicModal) ->
+selectDir = ($ionicPlatform, $ionicModal) ->
 	restrict:	'E'
 	
 	scope:
@@ -35,6 +35,7 @@ selectDir = ($ionicModal) ->
 							modal:	modal
 							
 							close:	->
+								deregister()
 								modal.remove()
 							
 							select: (item) ->
@@ -46,7 +47,9 @@ selectDir = ($ionicModal) ->
 								else
 									scope.selected = item.label
 									scope.close()
-									
+						
+						deregister = $ionicPlatform.registerBackButtonAction scope.close, 401
+    								
 						modal.show()
 
 
@@ -56,7 +59,7 @@ select from array of object
 <fancy-select-object template-url="../select.html" ng-selected="objSelected" ng-model="object" multiple title="Choose currencies">
 </fancy-select-object>
 ###
-selectObjectDir = ($ionicModal) ->
+selectObjectDir = ($ionicPlatform, $ionicModal) ->
 	restrict:	'E'
 	
 	scope:
@@ -115,6 +118,7 @@ selectObjectDir = ($ionicModal) ->
 							
 							close: ->
 								selected.fromModel()
+								deregister()
 								modal.remove()
 								
 							select: (item) ->
@@ -122,7 +126,9 @@ selectObjectDir = ($ionicModal) ->
 									selected.clearModel()
 									item.selected = true
 									scope.close()
-									
+						
+						deregister = $ionicPlatform.registerBackButtonAction scope.close, 401
+    						
 						modal.show()
 					
 ###
@@ -131,7 +137,7 @@ select from pageableAR.collection
 <fancy-select-model template-url="../selectModel.html" ng-selected="selected" ng-model="collection" label="fullname" title="Select users">
 </fancy-select-model>
 ###
-selectModelDir = ($ionicModal) ->
+selectModelDir = ($ionicPlatform, $ionicModal) ->
 	restrict:	'E'
 	
 	scope:
@@ -192,6 +198,7 @@ selectModelDir = ($ionicModal) ->
 							
 							close: ->
 								selected.fromModel()
+								deregister()
 								modal.remove()
 								
 							select: (item) ->
@@ -208,9 +215,12 @@ selectModelDir = ($ionicModal) ->
 											selected.toModel(skip, scope.model.models.length)
 											scope.$broadcast('scroll.infiniteScrollComplete')
 										.catch alert
+						
+						deregister = $ionicPlatform.registerBackButtonAction scope.close, 401
+    					
 						modal.show()
 
 angular.module('ngFancySelect', ['ionic'])
-	.directive 'fancySelect', ['$ionicModal', selectDir]
-	.directive 'fancySelectObject', ['$ionicModal', selectObjectDir]
-	.directive 'fancySelectModel', ['$ionicModal', selectModelDir]
+	.directive 'fancySelect', ['$ionicPlatform', '$ionicModal', selectDir]
+	.directive 'fancySelectObject', ['$ionicPlatform', '$ionicModal', selectObjectDir]
+	.directive 'fancySelectModel', ['$ionicPlatform', '$ionicModal', selectModelDir]

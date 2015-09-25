@@ -73,7 +73,7 @@ select from array of primitive
  */
 var selectDir, selectModelDir, selectObjectDir;
 
-selectDir = function($ionicModal) {
+selectDir = function($ionicPlatform, $ionicModal) {
   return {
     restrict: 'E',
     scope: {
@@ -103,9 +103,11 @@ selectDir = function($ionicModal) {
           return $ionicModal.fromTemplateUrl("fancy-select.html", {
             scope: scope
           }).then(function(modal) {
+            var deregister;
             _.extend(scope, {
               modal: modal,
               close: function() {
+                deregister();
                 return modal.remove();
               },
               select: function(item) {
@@ -121,6 +123,7 @@ selectDir = function($ionicModal) {
                 }
               }
             });
+            deregister = $ionicPlatform.registerBackButtonAction(scope.close, 401);
             return modal.show();
           });
         }
@@ -137,7 +140,7 @@ select from array of object
 </fancy-select-object>
  */
 
-selectObjectDir = function($ionicModal) {
+selectObjectDir = function($ionicPlatform, $ionicModal) {
   return {
     restrict: 'E',
     scope: {
@@ -212,10 +215,12 @@ selectObjectDir = function($ionicModal) {
           return $ionicModal.fromTemplateUrl("fancy-select-object.html", {
             scope: scope
           }).then(function(modal) {
+            var deregister;
             _.extend(scope, {
               modal: modal,
               close: function() {
                 selected.fromModel();
+                deregister();
                 return modal.remove();
               },
               select: function(item) {
@@ -226,6 +231,7 @@ selectObjectDir = function($ionicModal) {
                 }
               }
             });
+            deregister = $ionicPlatform.registerBackButtonAction(scope.close, 401);
             return modal.show();
           });
         }
@@ -242,7 +248,7 @@ select from pageableAR.collection
 </fancy-select-model>
  */
 
-selectModelDir = function($ionicModal) {
+selectModelDir = function($ionicPlatform, $ionicModal) {
   return {
     restrict: 'E',
     scope: {
@@ -324,10 +330,12 @@ selectModelDir = function($ionicModal) {
           return $ionicModal.fromTemplateUrl("fancy-select-model.html", {
             scope: scope
           }).then(function(modal) {
+            var deregister;
             _.extend(scope, {
               modal: modal,
               close: function() {
                 selected.fromModel();
+                deregister();
                 return modal.remove();
               },
               select: function(item) {
@@ -348,6 +356,7 @@ selectModelDir = function($ionicModal) {
                 }
               }
             });
+            deregister = $ionicPlatform.registerBackButtonAction(scope.close, 401);
             return modal.show();
           });
         }
@@ -356,7 +365,7 @@ selectModelDir = function($ionicModal) {
   };
 };
 
-angular.module('ngFancySelect', ['ionic']).directive('fancySelect', ['$ionicModal', selectDir]).directive('fancySelectObject', ['$ionicModal', selectObjectDir]).directive('fancySelectModel', ['$ionicModal', selectModelDir]);
+angular.module('ngFancySelect', ['ionic']).directive('fancySelect', ['$ionicPlatform', '$ionicModal', selectDir]).directive('fancySelectObject', ['$ionicPlatform', '$ionicModal', selectObjectDir]).directive('fancySelectModel', ['$ionicPlatform', '$ionicModal', selectModelDir]);
 
 
 
