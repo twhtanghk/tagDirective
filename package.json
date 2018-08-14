@@ -1,6 +1,6 @@
 {
   "name": "tagDirective",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "tagDirective",
   "main": "tag.js",
   "scripts": {
