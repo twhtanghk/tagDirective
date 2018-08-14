@@ -94,7 +94,7 @@ selectObjectDir = ($ionicPlatform, $ionicModal) ->
 					fromModel: ->
 						if scope.multiple
 							scope.selected.length = 0
-							scope.selected = _.union scope.selected, _.where(scope.model, selected: true)
+							scope.selected = _.union scope.selected, _.filter(scope.model, selected: true)
 						else
 							scope.selected = _.findWhere scope.model, selected: true
 						
@@ -174,7 +174,7 @@ selectModelDir = ($ionicPlatform, $ionicModal) ->
 					fromModel: ->
 						if scope.multiple
 							scope.selected.length = 0
-							scope.selected = _.union scope.selected, _.where(scope.model.models, selected: true)
+							scope.selected = _.union scope.selected, _.filter(scope.model.models, selected: true)
 						else
 							scope.selected = _.findWhere scope.model.models, selected: true
 						
